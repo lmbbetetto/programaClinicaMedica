@@ -29,6 +29,7 @@ struct Medico
     char telefone[15];
     int idEspecializacao;
     float valorConsulta;
+    int status;
 };
 struct Consulta
 {
@@ -325,6 +326,7 @@ void leituraMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico, 
             {
                 cout << "\nValor da Consulta: ";
                 cin >> medicos[i].valorConsulta;
+                medicos[i].status = 0;
 
                 contMedico = i;
 
@@ -384,7 +386,7 @@ void buscaEspeci(Especializacao especializacoes[], indexEspeci indxEspeci[], int
     }
     else
     {
-        cout << "Especialização não enconstrada!";
+        cout << "Especialização não encontrada!";
         cond = 1;
     }
 }
@@ -447,6 +449,7 @@ void inclusaoMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico,
             {
                 cout << "\nValor da Consulta: ";
                 cin >> medicos[i].valorConsulta;
+                medicos[i].status = 0;
 
                 contMedico = i;
 
@@ -466,5 +469,26 @@ void inclusaoMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico,
 
 void buscaEspeci(Medico medicos[], indexMedico indxMedico[], int &contMedico, int &contEspeci, Especializacao especializacoes[], indexEspeci indxEspeci[])
 {
-    
+    int codpesq, cond = 0;
+    cout << "Busca de médico!\n\n";
+    cout << "Informe a Especialidade: ";
+    cin >> codpesq;
+    buscaEspeci(especializacoes, indxEspeci, codpesq, contEspeci, cond);
+    cout << "\n\n";
+
+    if (cond == 0)
+    {
+        int j;
+        for (int i = 0; i <= contMedico; i++)
+        {
+            j = indxMedico[i].endF;
+            if (medicos[j].status == 0 && medicos[j].idEspecializacao == codpesq)
+            {
+                cout << "CRM: " << medicos[j].crm << endl;
+                cout << "Nome: " << medicos[j].nome << endl << endl;
+            }
+        }
+    }
+    cout << "\n\n\n";
+    system("pause");
 }
