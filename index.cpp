@@ -74,6 +74,9 @@ void inclusaoMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico,
 
 void buscaEspeci(Medico medicos[], indexMedico indxMedico[], int &contMedico, int &contEspeci, Especializacao especializacoes[], indexEspeci indxEspeci[]);
 
+void agendarConsulta(Consulta consultas[], indexConsulta indxConsultas[], int &contConsulta, Medico medicos[], indexMedico indxMedico[], int &contMedico);
+void indexConsultas(Consulta consultas[], indexConsulta indxConsultas[], int &contConsulta, int &aux);
+
 int main()
 {
     setlocale(LC_ALL, "");
@@ -90,6 +93,10 @@ int main()
     indexMedico indxMedico[t];
     int contMedico = -1;
 
+    Consulta consultas[t];
+    indexConsulta indxConsultas[t];
+    int contConsulta = -1;
+
     // início switch
     int pont = -1;
     int aux;
@@ -102,6 +109,7 @@ int main()
         cout << "1 - Leituras\n";
         cout << "2 - Inclusões\n";
         cout << "3 - Busca Por Especialização\n";
+        cout << "4 - Agendar Consulta\n";
         cout << "0 - Sair\n\n";
         cout << "Selecione uma opção: ";
         cin >> aux;
@@ -195,6 +203,13 @@ int main()
         case 3:
             system("cls");
             buscaEspeci(medicos, indxMedico, contMedico, contEspeci, especializacoes, indxEspeci);
+            system("pause");
+            break;
+
+        case 4:
+            system("cls");
+            agendarConsulta(consultas, indxConsultas, contConsulta, medicos, indxMedico, contMedico);
+            system("pause");
             break;
 
         case 0:
@@ -485,10 +500,54 @@ void buscaEspeci(Medico medicos[], indexMedico indxMedico[], int &contMedico, in
             if (medicos[j].status == 0 && medicos[j].idEspecializacao == codpesq)
             {
                 cout << "CRM: " << medicos[j].crm << endl;
-                cout << "Nome: " << medicos[j].nome << endl << endl;
+                cout << "Nome: " << medicos[j].nome << endl
+                     << endl;
             }
         }
     }
     cout << "\n\n\n";
-    system("pause");
+}
+
+void agendarConsulta(Consulta consultas[], indexConsulta indxConsultas[], int &contConsulta, Medico medicos[], indexMedico indxMedico[], int &contMedico)
+{
+    for (int i = 0; i < t && consultas[i - 1].cpfPaciente != -1; i++)
+    {
+        system("cls");
+        cout << "Agendamento de Consulta!\n\n";
+        cout << "CPF: ";
+        cin >> consultas[i].cpfPaciente;
+        if (consultas[i].cpfPaciente != -1)
+        {
+            cout << "CRM: ";
+            cin >> consultas[i].crmMedico;
+            cout << "Data: ";
+            cin >> consultas[i].data;
+            cout << "Horário: ";
+            cin >> consultas[i].horario;
+            contConsulta++;
+
+            indexConsultas(consultas, indxConsultas, contConsulta, i);
+        }
+    }
+}
+
+void indexConsultas(Consulta consultas[], indexConsulta indxConsultas[], int &contConsulta, int &aux)
+{
+    int i;
+
+    if (aux == 0)
+    {
+        indxConsultas[aux].cpfPaciente = consultas[aux].cpfPaciente;
+        indxConsultas[aux].endF = aux;
+    }
+    else
+    {
+        for (i = contPacientes - 1; indxPacientes[i].cpf > pacientes[aux].cpf && i >= 0; i--)
+        {
+            indxPacientes[i + 1].cpf = indxPacientes[i].cpf;
+            indxPacientes[i + 1].endF = indxPacientes[i].endF;
+        }
+        indxPacientes[i + 1].cpf = pacientes[aux].cpf;
+        indxPacientes[i + 1].endF = aux;
+    }
 }
