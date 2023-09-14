@@ -76,6 +76,7 @@ void buscaEspeci(Medico medicos[], indexMedico indxMedico[], int &contMedico, in
 
 void agendarConsulta(Consulta consultas[], indexConsulta indxConsultas[], int &contConsulta, Medico medicos[], indexMedico indxMedico[], int &contMedico);
 void indexConsultas(Consulta consultas[], indexConsulta indxConsultas[], int &contConsulta, int &aux);
+void buscaMedico(Medico medicos[], indexMedico indxMedico[], int &codpesq, int &contMedico);
 
 int main()
 {
@@ -95,7 +96,7 @@ int main()
 
     Consulta consultas[t];
     indexConsulta indxConsultas[t];
-    int contConsulta = -1;
+    int contConsulta = 0;
 
     // início switch
     int pont = -1;
@@ -510,7 +511,7 @@ void buscaEspeci(Medico medicos[], indexMedico indxMedico[], int &contMedico, in
 
 void agendarConsulta(Consulta consultas[], indexConsulta indxConsultas[], int &contConsulta, Medico medicos[], indexMedico indxMedico[], int &contMedico)
 {
-    for (int i = 0; i < t && consultas[i - 1].cpfPaciente != -1; i++)
+    for (int i = contConsulta; i < t && consultas[i - 1].cpfPaciente != -1; i++)
     {
         system("cls");
         cout << "Agendamento de Consulta!\n\n";
@@ -524,7 +525,7 @@ void agendarConsulta(Consulta consultas[], indexConsulta indxConsultas[], int &c
             cin >> consultas[i].data;
             cout << "Horário: ";
             cin >> consultas[i].horario;
-            contConsulta++;
+            contConsulta = i;
 
             indexConsultas(consultas, indxConsultas, contConsulta, i);
         }
@@ -542,12 +543,16 @@ void indexConsultas(Consulta consultas[], indexConsulta indxConsultas[], int &co
     }
     else
     {
-        for (i = contPacientes - 1; indxPacientes[i].cpf > pacientes[aux].cpf && i >= 0; i--)
+        for (i = contConsulta - 1; indxConsultas[i].cpfPaciente > consultas[aux].cpfPaciente && i >= 0; i--)
         {
-            indxPacientes[i + 1].cpf = indxPacientes[i].cpf;
-            indxPacientes[i + 1].endF = indxPacientes[i].endF;
+            indxConsultas[i + 1].cpfPaciente = indxConsultas[i].cpfPaciente;
+            indxConsultas[i + 1].endF = indxConsultas[i].endF;
         }
-        indxPacientes[i + 1].cpf = pacientes[aux].cpf;
-        indxPacientes[i + 1].endF = aux;
+        indxConsultas[i + 1].cpfPaciente = consultas[aux].cpfPaciente;
+        indxConsultas[i + 1].endF = aux;
     }
+}
+
+void buscaMedico(Medico medicos[], indexMedico indxMedico[], int &codpesq, int &contMedico)
+{
 }
