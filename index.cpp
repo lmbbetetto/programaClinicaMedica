@@ -1,5 +1,6 @@
 #include <iostream>
 #include <clocale>
+#include <cstring>
 #define t 20
 
 using namespace std;
@@ -76,7 +77,10 @@ void buscaEspeci(Medico medicos[], indexMedico indxMedico[], int &contMedico, in
 
 void agendarConsulta(Consulta consultas[], indexConsulta indxConsultas[], int &contConsulta, Medico medicos[], indexMedico indxMedico[], int &contMedico);
 void indexConsultas(Consulta consultas[], indexConsulta indxConsultas[], int &contConsulta, int &aux);
-void buscaMedico(Medico medicos[], indexMedico indxMedico[], int &codpesq, int &contMedico);
+void buscaMedico(Medico medicos[], indexMedico indxMedico[], int &codpesq, int &contMedico, int &cond);
+
+void excluirMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico);
+void reorganizacaoMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico, Medico medicosAux[], indexMedico indxMedicoAux[]);
 
 int main()
 {
@@ -93,12 +97,14 @@ int main()
     Medico medicos[t];
     indexMedico indxMedico[t];
     int contMedico = -1;
+    Medico medicosAux[t];
+    indexMedico indxMedicoAux[t];
 
     Consulta consultas[t];
     indexConsulta indxConsultas[t];
     int contConsulta = 0;
 
-    // início switch
+    // in?cio switch
     int pont = -1;
     int aux;
     while (pont != 0)
@@ -111,6 +117,8 @@ int main()
         cout << "2 - Inclusões\n";
         cout << "3 - Busca Por Especialização\n";
         cout << "4 - Agendar Consulta\n";
+        cout << "5 - Excluir Médico\n";
+        cout << "6 - Reorganizar Médicos\n";
         cout << "0 - Sair\n\n";
         cout << "Selecione uma opção: ";
         cin >> aux;
@@ -213,6 +221,24 @@ int main()
             system("pause");
             break;
 
+        case 5:
+            system("cls");
+            excluirMedico(medicos, indxMedico, contMedico);
+            system("pause");
+            break;
+
+        case 6:
+            system("cls");
+            reorganizacaoMedico(medicos, indxMedico, contMedico, medicosAux, indxMedicoAux);
+
+            for (int i = 0; i < contMedico; i++)
+            {
+                cout << "CRM: " << indxMedico[i].crm << " | EndF: " << indxMedico[i].endF << " | Status: " << medicos[i].status << " | Nome: " << medicos[i].nome << endl;
+            }
+
+            system("pause");
+            break;
+
         case 0:
             system("cls");
             cout << "Saindo...\n\n\n";
@@ -239,7 +265,7 @@ void leituraPaciente(Paciente pacientes[], IndexPaciente indxPacientes[], int &c
             cin >> pacientes[i].sexo;
             cout << "Telefone: ";
             cin >> pacientes[i].telefone;
-            cout << "Endereço: ";
+            cout << "Endere?o: ";
             cin >> pacientes[i].end;
             cout << "Cidade: ";
             cin >> pacientes[i].cidade;
@@ -352,8 +378,8 @@ void leituraMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico, 
             {
                 system("cls");
                 i--;
-                cout << "\n\nNão foi possível continuar o cadastro!\n";
-                cout << "Error: Especialização não encontrada!\n\n\n";
+                cout << "\n\nN?o foi poss?vel continuar o cadastro!\n";
+                cout << "Error: Especializa??o n?o encontrada!\n\n\n";
                 system("pause");
             }
         }
@@ -423,7 +449,7 @@ void inclusaoPaciente(Paciente pacientes[], IndexPaciente indxPacientes[], int &
             cin >> pacientes[i].sexo;
             cout << "Telefone: ";
             cin >> pacientes[i].telefone;
-            cout << "Endereço: ";
+            cout << "Endere?o: ";
             cin >> pacientes[i].end;
             cout << "Cidade: ";
             cin >> pacientes[i].cidade;
@@ -475,7 +501,7 @@ void inclusaoMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico,
             {
                 system("cls");
                 i--;
-                cout << "\n\nNão foi possível continuar o cadastro!\n";
+                cout << "\n\nNão foi possãvel continuar o cadastro!\n";
                 cout << "Error: Especialização não encontrada!\n\n\n";
                 system("pause");
             }
@@ -501,7 +527,8 @@ void buscaEspeci(Medico medicos[], indexMedico indxMedico[], int &contMedico, in
             if (medicos[j].status == 0 && medicos[j].idEspecializacao == codpesq)
             {
                 cout << "CRM: " << medicos[j].crm << endl;
-                cout << "Nome: " << medicos[j].nome << endl
+                cout << "Nome: " << medicos[j].nome << endl;
+                cout << "Nome: " << medicos[j].valorConsulta << endl
                      << endl;
             }
         }
@@ -521,13 +548,26 @@ void agendarConsulta(Consulta consultas[], indexConsulta indxConsultas[], int &c
         {
             cout << "CRM: ";
             cin >> consultas[i].crmMedico;
-            cout << "Data: ";
-            cin >> consultas[i].data;
-            cout << "Horário: ";
-            cin >> consultas[i].horario;
-            contConsulta = i;
+            int cond = 0;
+            buscaMedico(medicos, indxMedico, consultas[i].crmMedico, contMedico, cond);
+            if (cond == 0)
+            {
+                cout << "Data: ";
+                cin >> consultas[i].data;
+                cout << "Horário: ";
+                cin >> consultas[i].horario;
+                contConsulta = i;
 
-            indexConsultas(consultas, indxConsultas, contConsulta, i);
+                indexConsultas(consultas, indxConsultas, contConsulta, i);
+            }
+            else
+            {
+                system("cls");
+                i--;
+                cout << "\n\nNão foi possível continuar o cadastro!\n";
+                cout << "Error: Médico não encontrado!\n\n\n";
+                system("pause");
+            }
         }
     }
 }
@@ -553,6 +593,93 @@ void indexConsultas(Consulta consultas[], indexConsulta indxConsultas[], int &co
     }
 }
 
-void buscaMedico(Medico medicos[], indexMedico indxMedico[], int &codpesq, int &contMedico)
+void buscaMedico(Medico medicos[], indexMedico indxMedico[], int &codpesq, int &contMedico, int &cond)
 {
+    int i = 0, f = contMedico;
+    int m = (i + f) / 2;
+    for (; f >= i && codpesq != indxMedico[m].crm; m = (i + f) / 2)
+    {
+        if (codpesq > indxMedico[m].crm)
+        {
+            i = m + 1;
+        }
+        else
+        {
+            f = m - 1;
+        }
+    }
+    if (indxMedico[m].crm == codpesq)
+    {
+        cout << "Nome: " << medicos[i].nome << endl;
+    }
+    else
+    {
+        cout << "Médico não existe!";
+        cond = 1;
+    }
+}
+
+void excluirMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico)
+{
+    int codpesq, cond = 0;
+    system("cls");
+    cout << "Excluir Médico!\n\n\n";
+    cout << "CRM: ";
+    cin >> codpesq;
+
+    int i = 0, f = contMedico;
+    int m = (i + f) / 2;
+    for (; f >= i && codpesq != indxMedico[m].crm; m = (i + f) / 2)
+    {
+        if (codpesq > indxMedico[m].crm)
+        {
+            i = m + 1;
+        }
+        else
+        {
+            f = m - 1;
+        }
+    }
+    if (indxMedico[m].crm == codpesq)
+    {
+        cout << "Nome: " << medicos[m].nome << endl;
+        medicos[m].status = 1;
+    }
+    else
+    {
+        cond = 1;
+    }
+
+    if (cond == 0)
+    {
+        cout << "Médico excluído com sucesso!\n\n";
+    }
+    else
+    {
+        cout << "Erro: Médico não existe!\n\n";
+    }
+}
+
+void reorganizacaoMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico, Medico medicosAux[], indexMedico indxMedicoAux[])
+{
+    int j = 0;
+    for (int k = 0; k <= contMedico; k++)
+    {
+        int i = indxMedico[k].endF;
+        if (medicos[i].status == 0)
+        {
+            indxMedico[j].crm = medicos[i].crm;
+            indxMedico[j].endF = j;
+            medicosAux[j] = medicos[i];
+            j++;
+        }
+    }
+
+    for (int i = 0; i <= j; i++)
+    {
+        int k = indxMedico[i].endF;
+        medicos[i] = medicosAux[k];
+    }
+    contMedico = j;
+    cout << "Reorganização concluída com sucesso!\n\n\n";
 }
