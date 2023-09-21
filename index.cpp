@@ -80,7 +80,10 @@ void indexConsultas(Consulta consultas[], indexConsulta indxConsultas[], int &co
 void buscaMedico(Medico medicos[], indexMedico indxMedico[], int &codpesq, int &contMedico, int &cond);
 
 void excluirMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico);
-void reorganizacaoMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico, Medico medicosAux[], indexMedico indxMedicoAux[]);
+void reorganizacaoMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico, Medico medicosAux[]);
+
+void faturamento(Consulta consultas[], int &contConsulta, Medico medicos[], int &contMedico);
+void maiorMenor(Consulta consultas[], int &contConsulta, Medico medicos[], int &contMedico);
 
 int main()
 {
@@ -98,13 +101,12 @@ int main()
     indexMedico indxMedico[t];
     int contMedico = -1;
     Medico medicosAux[t];
-    indexMedico indxMedicoAux[t];
 
     Consulta consultas[t];
     indexConsulta indxConsultas[t];
     int contConsulta = 0;
 
-    // in?cio switch
+    // início switch
     int pont = -1;
     int aux;
     while (pont != 0)
@@ -119,6 +121,8 @@ int main()
         cout << "4 - Agendar Consulta\n";
         cout << "5 - Excluir Médico\n";
         cout << "6 - Reorganizar Médicos\n";
+        cout << "7 - Faturamento da clínica\n";
+        cout << "8 - Maior e Menor faturamento da clínica\n";
         cout << "0 - Sair\n\n";
         cout << "Selecione uma opção: ";
         cin >> aux;
@@ -229,13 +233,19 @@ int main()
 
         case 6:
             system("cls");
-            reorganizacaoMedico(medicos, indxMedico, contMedico, medicosAux, indxMedicoAux);
+            reorganizacaoMedico(medicos, indxMedico, contMedico, medicosAux);
+            system("pause");
+            break;
 
-            for (int i = 0; i < contMedico; i++)
-            {
-                cout << "CRM: " << indxMedico[i].crm << " | EndF: " << indxMedico[i].endF << " | Status: " << medicos[i].status << " | Nome: " << medicos[i].nome << endl;
-            }
+        case 7:
+            system("cls");
+            faturamento(consultas, contConsulta, medicos, contMedico);
+            system("pause");
+            break;
 
+        case 8:
+            system("cls");
+            maiorMenor(consultas, contConsulta, medicos, contMedico);
             system("pause");
             break;
 
@@ -660,7 +670,7 @@ void excluirMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico)
     }
 }
 
-void reorganizacaoMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico, Medico medicosAux[], indexMedico indxMedicoAux[])
+void reorganizacaoMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico, Medico medicosAux[])
 {
     int j = 0;
     for (int k = 0; k <= contMedico; k++)
@@ -682,4 +692,49 @@ void reorganizacaoMedico(Medico medicos[], indexMedico indxMedico[], int &contMe
     }
     contMedico = j;
     cout << "Reorganização concluída com sucesso!\n\n\n";
+}
+
+void faturamento(Consulta consultas[], int &contConsulta, Medico medicos[], int &contMedico)
+{
+    cout << "Faturamento Clínica!\n\n\n";
+    int soma = 0, j, total;
+    for (int i = 0; i <= contConsulta; i++)
+    {
+        j = consultas[i].crmMedico;
+        for (int k = 0; k <= contMedico; k++)
+        {
+            if (j == medicos[k].crm)
+            {
+                soma += medicos[k].valorConsulta;
+            }
+        }
+    }
+
+    total = soma * 0.05;
+
+    cout << "Faturamento total da clínica: R$ " << total << endl;
+}
+
+void maiorMenor(Consulta consultas[], int &contConsulta, Medico medicos[], int &contMedico)
+{
+    cout << "Maior e Menor Faturamento da Clínica!\n\n\n";
+    int maior = medicos[0].valorConsulta, menor = medicos[0].valorConsulta, j;
+    ;
+    for (int i = 0; i <= contConsulta; i++)
+    {
+        j = consultas[i].crmMedico;
+        for (int k = 0; k <= contMedico; k++)
+        {
+            if (j == medicos[k].crm)
+            {
+                if (medicos[k].valorConsulta > maior) {
+                    maior = medicos[k].valorConsulta;
+                } else if (medicos[k].valorConsulta < menor) {
+                    menor = medicos[k].valorConsulta;
+                }
+            }
+        }
+    }
+    cout << "Consulta com menor Valor: " << menor << endl;
+    cout << "Consulta com maior Valor: " << maior << "\n\n\n";
 }
