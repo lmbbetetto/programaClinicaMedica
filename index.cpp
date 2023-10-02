@@ -1,3 +1,4 @@
+// Leonardo Manoel Batista Betetto - 2211550156
 #include <iostream>
 #include <clocale>
 #include <cstring>
@@ -167,6 +168,9 @@ int main()
                     break;
 
                 default:
+                    system("cls");
+                    cout << "Informe um valor de 0 a 3\n\n\n";
+                    system("pause");
                     break;
                 }
             }
@@ -202,10 +206,12 @@ int main()
                 case 2:
                     system("cls");
                     inclusaoMedico(medicos, indxMedico, contMedico, contEspeci, especializacoes, indxEspeci);
-                    for (int i = 0; i <= contMedico; i++)
-                    {
-                        cout << "CPF: " << indxMedico[i].crm << " | EndF: " << indxMedico[i].endF << "\n\n";
-                    }
+                    system("pause");
+                    break;
+
+                default:
+                    system("cls");
+                    cout << "Informe um valor de 0 a 2\n\n\n";
                     system("pause");
                     break;
                 }
@@ -254,6 +260,12 @@ int main()
             cout << "Saindo...\n\n\n";
             pont = 0;
             break;
+
+        default:
+            system("cls");
+            cout << "Informe um valor de 0 a 8\n\n\n";
+            system("pause");
+            break;
         }
     }
     // Fim switch
@@ -270,17 +282,18 @@ void leituraPaciente(Paciente pacientes[], IndexPaciente indxPacientes[], int &c
         if (pacientes[i].cpf != -1)
         {
             cout << "Nome: ";
-            cin >> pacientes[i].nome;
-            cout << "Sexo: ";
-            cin >> pacientes[i].sexo;
+            cin.ignore();
+            gets(pacientes[i].nome);
+            cout << "Sexo (F | M): ";
+            gets(pacientes[i].sexo);
             cout << "Telefone: ";
-            cin >> pacientes[i].telefone;
-            cout << "Endere?o: ";
-            cin >> pacientes[i].end;
+            gets(pacientes[i].telefone);
+            cout << "Endereço: ";
+            gets(pacientes[i].end);
             cout << "Cidade: ";
-            cin >> pacientes[i].cidade;
+            gets(pacientes[i].cidade);
             cout << "UF: ";
-            cin >> pacientes[i].uf;
+            gets(pacientes[i].uf);
             pacientes[i].status = 0;
             contPacientes = i;
 
@@ -321,7 +334,8 @@ void leituraEspecializacao(Especializacao especializacoes[], indexEspeci indxEsp
         if (especializacoes[i].id != -1)
         {
             cout << "Especialização: ";
-            cin >> especializacoes[i].especializacao;
+            cin.ignore();
+            gets(especializacoes[i].especializacao);
             contEspeci = i;
 
             IndexEspecializacao(especializacoes, indxEspeci, contEspeci, i);
@@ -356,18 +370,20 @@ void leituraMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico, 
     {
         system("cls");
         cout << "Leitura Médico!\n\n";
-        cout << "ID: ";
+        cout << "CRM: ";
         cin >> medicos[i].crm;
         if (medicos[i].crm != -1)
         {
             cout << "Nome: ";
-            cin >> medicos[i].nome;
+            cin.ignore();
+            gets(medicos[i].nome);
             cout << "Idade: ";
             cin >> medicos[i].idade;
             cout << "Sexo (M | F): ";
-            cin >> medicos[i].sexo;
+            cin.ignore();
+            gets(medicos[i].sexo);
             cout << "Telefone: ";
-            cin >> medicos[i].telefone;
+            gets(medicos[i].telefone);
 
             cout << "Código Especialização: ";
             cin >> medicos[i].idEspecializacao;
@@ -454,17 +470,18 @@ void inclusaoPaciente(Paciente pacientes[], IndexPaciente indxPacientes[], int &
         if (pacientes[i].cpf != -1)
         {
             cout << "Nome: ";
-            cin >> pacientes[i].nome;
-            cout << "Sexo: ";
-            cin >> pacientes[i].sexo;
+            cin.ignore();
+            gets(pacientes[i].nome);
+            cout << "Sexo (F | M): ";
+            gets(pacientes[i].sexo);
             cout << "Telefone: ";
-            cin >> pacientes[i].telefone;
-            cout << "Endere?o: ";
-            cin >> pacientes[i].end;
+            gets(pacientes[i].telefone);
+            cout << "Endereço: ";
+            gets(pacientes[i].end);
             cout << "Cidade: ";
-            cin >> pacientes[i].cidade;
+            gets(pacientes[i].cidade);
             cout << "UF: ";
-            cin >> pacientes[i].uf;
+            gets(pacientes[i].uf);
             pacientes[i].status = 0;
             contPacientes = i;
 
@@ -479,18 +496,20 @@ void inclusaoMedico(Medico medicos[], indexMedico indxMedico[], int &contMedico,
     {
         system("cls");
         cout << "Leitura Médico!\n\n";
-        cout << "ID: ";
+        cout << "CRM: ";
         cin >> medicos[i].crm;
         if (medicos[i].crm != -1)
         {
             cout << "Nome: ";
-            cin >> medicos[i].nome;
+            cin.ignore();
+            gets(medicos[i].nome);
             cout << "Idade: ";
             cin >> medicos[i].idade;
             cout << "Sexo (M | F): ";
-            cin >> medicos[i].sexo;
+            cin.ignore();
+            gets(medicos[i].sexo);
             cout << "Telefone: ";
-            cin >> medicos[i].telefone;
+            gets(medicos[i].telefone);
 
             cout << "Código Especialização: ";
             cin >> medicos[i].idEspecializacao;
@@ -563,9 +582,10 @@ void agendarConsulta(Consulta consultas[], indexConsulta indxConsultas[], int &c
             if (cond == 0)
             {
                 cout << "Data: ";
-                cin >> consultas[i].data;
+                cin.ignore();
+                gets(consultas[i].data);
                 cout << "Horário: ";
-                cin >> consultas[i].horario;
+                gets(consultas[i].horario);
                 contConsulta = i;
 
                 indexConsultas(consultas, indxConsultas, contConsulta, i);
@@ -727,9 +747,14 @@ void maiorMenor(Consulta consultas[], int &contConsulta, Medico medicos[], int &
         {
             if (j == medicos[k].crm)
             {
-                if (medicos[k].valorConsulta > maior) {
+                if (medicos[k].valorConsulta > maior)
+                {
                     maior = medicos[k].valorConsulta;
-                } else if (medicos[k].valorConsulta < menor) {
+                }
+                else if (medicos[k].valorConsulta < menor)
+
+                
+                {
                     menor = medicos[k].valorConsulta;
                 }
             }
